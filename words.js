@@ -1,4 +1,4 @@
-//requiring our Letter constructor
+//requiring our Letter constructor exported from letters.js
 var Letter = require("./letters");
 
 //constructor function for creating words

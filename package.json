@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/sabomade/constructors-word-guess#readme",
   "dependencies": {
+    "inquirer": "^7.0.1",
     "prompt": "^1.0.0"
   }
 }
