@@ -1,11 +1,11 @@
-//Constructor function
+//Constructor function for creating letters
 var Letter = function(char, guessed){
     this.char = char;
     this.guessed = guessed;
 }
 
 //function to display letter or _ based on this.guessed
-Letter.prototype.toString = function(){
+Letter.prototype.display = function(){
     if (this.guessed){
         return this.char+ " ";
     }
@@ -24,7 +24,8 @@ module.exports = Letter;
 
 //test case - yes this works!
 // const d = new Letter("d", false);
-// console.log(d+"");
+// console.log(d);
+// console.log(d.display());
 // console.log(d.guess("a"));
 // console.log(d.guess("d"));
-// console.log(d+"");
+// console.log(d.display());
