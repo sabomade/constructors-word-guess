@@ -13,7 +13,6 @@ var words = ["bird", "cat", "dog", "hippopotamus", "giraffe", "lion"];
 var guesses = 12;
 
 var currentWord;
-var currentGuess;
 var correctGuesses = 0;
 
 
@@ -23,7 +22,7 @@ var correctGuesses = 0;
 function chooseWord(){
     var chosenWord = words[Math.floor(Math.random() * words.length)];
     chosenWord = chosenWord.split("");
-    wordArr = new Word(chosenWord);
+    var wordArr = new Word(chosenWord);
     return wordArr;
 }
 
@@ -42,11 +41,14 @@ function getUserGuess(word){
 
             //checks if user guess is in the word, changes value of word
             word.letterGuess(res.Guess);
-            word.forEach(letterObj => {
-                if (letterObj.guessed){
+            //console.log(word);
+          
+            //checks score
+            for (let index = 0; index < word.length; index++) {
+                if(res.Guess === word[index].char){
                     correctGuesses++;
-                }
-            });
+                }   
+            }
             
             //displays updated word
             displayWord(word);
@@ -68,10 +70,12 @@ function start(){
             currentWord = chooseWord();
             //console.log('currentword:',currentWord);
             displayWord(currentWord);
-            for (let index = 0; index <=guesses; index++) {
-                if (correctGuesses === currentWord.length){
-                    return console.log("Congrats!  You Win");
-                }   
+            if (correctGuesses === currentWord.length){
+                return console.log("Congrats!  You Win");
+            }else if(guesses <=0 && correctGuesses !== currentWord.length){
+                console.log("Better luck next time! Sorry, you lose.");
+                start();
+            }else{  
                 getUserGuess(currentWord);
             }
         }else if(answer.option === "EXIT"){
