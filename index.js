@@ -13,7 +13,9 @@ var words = ["bird", "cat", "dog", "hippopotamus", "giraffe", "lion"];
 var guesses = 12;
 
 var currentWord;
+var currentGuess;
 var correctGuesses = 0;
+
 
 // -----------------
 // FUNCTIONS
@@ -30,59 +32,32 @@ function displayWord(word){
 }
 
 function getUserGuess(word){
-    if(correctGuesses === word.length){
-        //game over - you win
-        console.log("Congrats! You've won!");
+    prompt.start();
+    prompt.get("Guess", function(err, res){
+        if (err) throw err;
+        else{
+            //decrease guess count
+            guesses--;
+            console.log(guesses+" guesses left");
 
-        //inquire if user would like to play another round?
-        start();
-    }else if (guesses >0 && correctGuesses !== word.length){
-        prompt.start();
-        prompt.get(["Guess a Letter:"], function(err, res){
-            if (err) throw err;
-            else{
-                //decrease guess count
-                guesses--;
-
-                //checks if user guess is correct (true) or not (false)
-                //console.log(word.letterGuess(res));
-                let val = word.letterGuess(res);
-                
-                //variable check if user guess is true or false 
-                let isTrue = false;
-                val.forEach(letter => {
-                    if (letter === true){
-                        return isTrue = true;
-                    }
-                    return isTrue;
-                });
-                if (isTrue){
+            //checks if user guess is in the word, changes value of word
+            word.letterGuess(res.Guess);
+            word.forEach(letterObj => {
+                if (letterObj.guessed){
                     correctGuesses++;
-                    console.log("Congrats! You guessed correctly.");
-                    displayWord(word);
-                    
-                    //prompt new guess from user
-                    getUserGuess(word);
-                }else{
-                    //if false write message to screen
-                    console.log("Sorry, try again!");
-                    displayWord(word);
-
-                    //prompt new guess from user
-                    getUserGuess(word);
                 }
-            }
-        });
-    }else if (guesses <=0 && correctGuesses !== word.length) {
-        //game over - no more guesses left
-        console.log("Sorry you ran out of guesses");
+            });
+            
+            //displays updated word
+            displayWord(word);
+        }
+    });
 
-        //inquire if user would like to play another round?
-        start();
-    }
 }
 
 function start(){
+    guesses = 12;
+    correctGuesses = 0;
     inquirer.prompt({
         name: "option",
         type: "list",
@@ -91,8 +66,14 @@ function start(){
     }).then(function(answer){
         if(answer.option === "Start a Round of Hangman"){
             currentWord = chooseWord();
+            //console.log('currentword:',currentWord);
             displayWord(currentWord);
-            getUserGuess(currentWord);
+            for (let index = 0; index <=guesses; index++) {
+                if (correctGuesses === currentWord.length){
+                    return console.log("Congrats!  You Win");
+                }   
+                getUserGuess(currentWord);
+            }
         }else if(answer.option === "EXIT"){
             process.end(1);
         }
