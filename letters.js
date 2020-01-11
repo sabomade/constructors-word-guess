@@ -16,7 +16,7 @@ Letter.prototype.guess = function(userGuess){
     if(this.char === userGuess){
         return this.guessed = true;
     }
-    return this.guessed = false;
+    //return this.guessed = false;
 }
 
 //export Letter consturctor, required in word.js

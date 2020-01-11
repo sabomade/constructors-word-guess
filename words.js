@@ -4,6 +4,7 @@ var Letter = require("./letters");
 //constructor function for creating words
 var Word = function(arrOfChar){
     this.word = [];
+    this.compare = "";
     arrOfChar.forEach(char => {
         return this.word.push(new Letter(char, false));
     });
@@ -33,8 +34,8 @@ module.exports = Word;
 
 //test case - yes this works!
 // const bird = new Word(['b', 'i', 'r', 'd']);
-// //console.log(bird);
-// console.log(bird+"");
+// console.log(bird);
+// console.log(bird.toString());
 // console.log(bird.letterGuess('a'));
 // console.log(bird+"");
 // console.log(bird.letterGuess("b"));

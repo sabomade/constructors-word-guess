@@ -13,7 +13,9 @@ var words = ["bird", "cat", "dog", "hippopotamus", "giraffe", "lion"];
 var guesses = 12;
 
 var currentWord;
-var correctGuesses = 0;
+var wordtoGuess;
+var letterstoGuess;
+var currentGuess;
 
 
 // -----------------
@@ -23,43 +25,67 @@ function chooseWord(){
     var chosenWord = words[Math.floor(Math.random() * words.length)];
     chosenWord = chosenWord.split("");
     var wordArr = new Word(chosenWord);
+    letterstoGuess = wordArr.word.length;
     return wordArr;
 }
 
-function displayWord(word){
-    console.log(word+"");
+function displayWord(){
+    wordtoGuess = currentWord.toString()
+    console.log(wordtoGuess);
+    currentWord.compare = wordtoGuess;
+    //console.log("displayWord function")
 }
 
-function getUserGuess(word){
+function getUserGuess(){
+    //console.log("getUserGuess function" + guesses)
     prompt.start();
     prompt.get("Guess", function(err, res){
         if (err) throw err;
         else{
-            //decrease guess count
-            guesses--;
-            console.log(guesses+" guesses left");
-
-            //checks if user guess is in the word, changes value of word
-            word.letterGuess(res.Guess);
-            //console.log(word);
-          
-            //checks score
-            for (let index = 0; index < word.length; index++) {
-                if(res.Guess === word[index].char){
-                    correctGuesses++;
-                }   
-            }
+            if (guesses !== 0){
+                //decrease guess count
+                guesses--;
             
-            //displays updated word
-            displayWord(word);
+                //checks if user guess is in the word, changes value word.guessed to true if user guessed correctly
+                currentWord.letterGuess(res.Guess);
+                wordtoGuess = currentWord.toString();
+                //console.log(wordtoGuess);
+
+                //if user has not correctly guessed letter
+                if (currentWord.compare === wordtoGuess){
+                    console.log("Nope. Try again.", guesses, "guesses remaining");
+                    if (guesses === 0){
+                        gameOver();
+                    }else{
+                        displayWord();
+                        getUserGuess();
+                    }
+                }
+                //else user guessed correct letter
+                else{
+                    letterstoGuess--;
+                    displayWord();
+                    //if all letters guessed
+                    if (letterstoGuess === 0){
+                        console.log("Congrats you Won!");
+                        start();
+                    }else{
+                        getUserGuess();
+                    }
+                }
+            }
         }
     });
 
 }
 
+function gameOver(){
+    console.log("Game Over.");
+    start();
+}
+ 
+
 function start(){
-    guesses = 12;
-    correctGuesses = 0;
     inquirer.prompt({
         name: "option",
         type: "list",
@@ -67,19 +93,13 @@ function start(){
         choices:["Start a Round of Hangman", "EXIT"]
     }).then(function(answer){
         if(answer.option === "Start a Round of Hangman"){
+            guesses = 12;
             currentWord = chooseWord();
             //console.log('currentword:',currentWord);
-            displayWord(currentWord);
-            if (correctGuesses === currentWord.length){
-                return console.log("Congrats!  You Win");
-            }else if(guesses <=0 && correctGuesses !== currentWord.length){
-                console.log("Better luck next time! Sorry, you lose.");
-                start();
-            }else{  
-                getUserGuess(currentWord);
-            }
+            displayWord();
+            getUserGuess();
         }else if(answer.option === "EXIT"){
-            process.end(1);
+            process.exit(128);
         }
     });
 }
