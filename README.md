@@ -3,7 +3,7 @@ A word guess command-line game using constructor functions. Built within 3 separ
 
 ### Demos 
 `node index.js` starts the program.
-![constructor-word-guess demo](demos/constructor_demo.gif)
+![constructor-word-guess demo](demo/constructor_demo.gif)
 
 ### How to Run
 This app is employed using node in the terminal. To run this program: download files, open terminal and navigate to the downloaded folder. Once inside the folder, type the following command into the terminal to begin:
